@@ -201,7 +201,7 @@ PYBIND11_MODULE(chiapos, m)
                 LargeBits quality;
                 {
                     py::gil_scoped_release release;
-                    quality = v.ValidateProof(seed_ptr, 31, challenge_ptr, proof_ptr, len(proof));
+                    quality = v.ValidateProof(seed_ptr, k, challenge_ptr, proof_ptr, len(proof));
                 }
                 if (quality.GetSize() == 0) {
                     return stdx::optional<py::bytes>();

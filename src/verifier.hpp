@@ -261,7 +261,7 @@ public:
         // Makes sure the output is equal to the first k bits of the challenge
         if (challenge_bits.Slice(0, k) == ys[0].Slice(0, k)) {
             // Returns quality string, which requires changing proof to plot ordering
-            return GetQualityString(k, proof_bits, quality_index, challenge);
+            return GetQualityString(31, proof_bits, quality_index, challenge);
         } else {
             return LargeBits();
         }
