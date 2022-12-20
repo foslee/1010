@@ -26,7 +26,6 @@ using std::experimental::optional;
 #include "../src/plotter_disk.hpp"
 #include "../src/prover_disk.hpp"
 #include "../src/verifier.hpp"
-#include "../src/verifier7.hpp"
 
 namespace py = pybind11;
 
@@ -180,11 +179,11 @@ PYBIND11_MODULE(chiapos, m)
                 delete[] quality_buf;
                 return stdx::optional<py::bytes>(quality_py);
             });
-    py::class_<Verifier7>(m, "Verifier")
+    py::class_<Verifier8>(m, "Verifier")
         .def(py::init<>())
         .def(
             "validate_proof",
-            [](Verifier7 &v,
+            [](Verifier &v,
                const py::bytes &seed,
                uint8_t k,
                const py::bytes &challenge,
