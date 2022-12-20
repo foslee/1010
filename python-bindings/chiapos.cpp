@@ -179,11 +179,11 @@ PYBIND11_MODULE(chiapos, m)
                 delete[] quality_buf;
                 return stdx::optional<py::bytes>(quality_py);
             });
-    py::class_<Verifier8>(m, "Verifier")
+    py::class_<Verifier8>(m, "Verifier8")
         .def(py::init<>())
         .def(
             "validate_proof",
-            [](Verifier &v,
+            [](Verifier8 &v,
                const py::bytes &seed,
                uint8_t k,
                const py::bytes &challenge,
