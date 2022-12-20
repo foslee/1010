@@ -26,6 +26,7 @@ using std::experimental::optional;
 #include "../src/plotter_disk.hpp"
 #include "../src/prover_disk.hpp"
 #include "../src/verifier.hpp"
+#include "../src/verifier7.hpp"
 
 namespace py = pybind11;
 
@@ -179,6 +180,39 @@ PYBIND11_MODULE(chiapos, m)
                 delete[] quality_buf;
                 return stdx::optional<py::bytes>(quality_py);
             });
+    py::class_<Verifier7>(m, "Verifier")
+        .def(py::init<>())
+        .def(
+            "validate_proof",
+            [](Verifier &v,
+               const py::bytes &seed,
+               uint8_t k,
+               const py::bytes &challenge,
+               const py::bytes &proof) {
+                std::string seed_str(seed);
+                const uint8_t *seed_ptr = reinterpret_cast<const uint8_t *>(seed_str.data());
+
+                std::string challenge_str(challenge);
+                const uint8_t *challenge_ptr =
+                    reinterpret_cast<const uint8_t *>(challenge_str.data());
+
+                std::string proof_str(proof);
+                const uint8_t *proof_ptr = reinterpret_cast<const uint8_t *>(proof_str.data());
+
+                LargeBits quality;
+                {
+                    py::gil_scoped_release release;
+                    quality = v.ValidateProof(seed_ptr, k, challenge_ptr, proof_ptr, len(proof));
+                }
+                if (quality.GetSize() == 0) {
+                    return stdx::optional<py::bytes>();
+                }
+                uint8_t *quality_buf = new uint8_t[32];
+                quality.ToBytes(quality_buf);
+                py::bytes quality_py = py::bytes(reinterpret_cast<char *>(quality_buf), 32);
+                delete[] quality_buf;
+                return stdx::optional<py::bytes>(quality_py);
+            });			
 }
 
 #endif  // PYTHON_BINDINGS_PYTHON_BINDINGS_HPP_
