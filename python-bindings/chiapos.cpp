@@ -184,7 +184,7 @@ PYBIND11_MODULE(chiapos, m)
         .def(py::init<>())
         .def(
             "validate_proof",
-            [](Verifier &v,
+            [](Verifier7 &v,
                const py::bytes &seed,
                uint8_t k,
                const py::bytes &challenge,
